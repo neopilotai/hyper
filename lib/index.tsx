@@ -1,15 +1,14 @@
-import './v8-snapshot-util';
-import {webFrame} from 'electron';
+import { webFrame } from 'electron';
 import React from 'react';
 
-import {createRoot} from 'react-dom/client';
-import {Provider} from 'react-redux';
+import { createRoot } from 'react-dom/client';
+import { Provider } from 'react-redux';
 
-import type {configOptions} from '../typings/config';
+import type { configOptions } from '../typings/config';
 
-import {loadConfig, reloadConfig} from './actions/config';
+import { loadConfig, reloadConfig } from './actions/config';
 import init from './actions/index';
-import {addNotificationMessage} from './actions/notifications';
+import { addNotificationMessage } from './actions/notifications';
 import * as sessionActions from './actions/sessions';
 import * as termGroupActions from './actions/term-groups';
 import * as uiActions from './actions/ui';
@@ -18,7 +17,7 @@ import HyperContainer from './containers/hyper';
 import rpc from './rpc';
 import configureStore from './store/configure-store';
 import * as config from './utils/config';
-import {getBase64FileData} from './utils/file';
+import { getBase64FileData } from './utils/file';
 import * as plugins from './utils/plugins';
 
 // On Linux, the default zoom was somehow changed with Electron 3 (or maybe 2).
@@ -29,13 +28,13 @@ if (process.platform === 'linux') {
 
 const store_ = configureStore();
 
-Object.defineProperty(window, 'store', {get: () => store_});
-Object.defineProperty(window, 'rpc', {get: () => rpc});
-Object.defineProperty(window, 'config', {get: () => config});
-Object.defineProperty(window, 'plugins', {get: () => plugins});
+Object.defineProperty(window, 'store', { get: () => store_ });
+Object.defineProperty(window, 'rpc', { get: () => rpc });
+Object.defineProperty(window, 'config', { get: () => config });
+Object.defineProperty(window, 'plugins', { get: () => plugins });
 
 const fetchFileData = (configData: configOptions) => {
-  const configInfo: configOptions = {...configData, bellSound: null};
+  const configInfo: configOptions = { ...configData, bellSound: null };
   if (!configInfo.bell || configInfo.bell.toUpperCase() !== 'SOUND' || !configInfo.bellSoundURL) {
     store_.dispatch(reloadConfig(configInfo));
     return;
@@ -85,11 +84,11 @@ rpc.on('session data', (d: string) => {
   store_.dispatch(sessionActions.addSessionData(uid, data));
 });
 
-rpc.on('session data send', ({uid, data, escaped}) => {
+rpc.on('session data send', ({ uid, data, escaped }) => {
   store_.dispatch(sessionActions.sendSessionData(uid, data, escaped));
 });
 
-rpc.on('session exit', ({uid}) => {
+rpc.on('session exit', ({ uid }) => {
   store_.dispatch(termGroupActions.ptyExitTermGroup(uid));
 });
 
@@ -157,15 +156,15 @@ rpc.on('session search close', () => {
   store_.dispatch(sessionActions.closeSearch());
 });
 
-rpc.on('termgroup add req', ({activeUid, profile}) => {
+rpc.on('termgroup add req', ({ activeUid, profile }) => {
   store_.dispatch(termGroupActions.requestTermGroup(activeUid, profile));
 });
 
-rpc.on('split request horizontal', ({activeUid, profile}) => {
+rpc.on('split request horizontal', ({ activeUid, profile }) => {
   store_.dispatch(termGroupActions.requestHorizontalSplit(activeUid, profile));
 });
 
-rpc.on('split request vertical', ({activeUid, profile}) => {
+rpc.on('split request vertical', ({ activeUid, profile }) => {
   store_.dispatch(termGroupActions.requestVerticalSplit(activeUid, profile));
 });
 
@@ -201,7 +200,7 @@ rpc.on('prev pane req', () => {
   store_.dispatch(uiActions.moveToPreviousPane());
 });
 
-rpc.on('open file', ({path}) => {
+rpc.on('open file', ({ path }) => {
   store_.dispatch(uiActions.openFile(path));
 });
 
@@ -209,7 +208,7 @@ rpc.on('open ssh', (parsedUrl) => {
   store_.dispatch(uiActions.openSSH(parsedUrl));
 });
 
-rpc.on('update available', ({releaseName, releaseNotes, releaseUrl, canInstall}) => {
+rpc.on('update available', ({ releaseName, releaseNotes, releaseUrl, canInstall }) => {
   store_.dispatch(updaterActions.updateAvailable(releaseName, releaseNotes, releaseUrl, canInstall));
 });
 
@@ -221,7 +220,7 @@ rpc.on('windowGeometry change', (data) => {
   store_.dispatch(uiActions.windowGeometryUpdated(data));
 });
 
-rpc.on('add notification', ({text, url, dismissable}) => {
+rpc.on('add notification', ({ text, url, dismissable }) => {
   store_.dispatch(addNotificationMessage(text, url, dismissable));
 });
 
