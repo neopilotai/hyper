@@ -1,116 +1,203 @@
-![](https://assets.vercel.com/image/upload/v1549723846/repositories/hyper/hyper-3-repo-banner.png)
+# Terminal Copilot
 
-<p align="center">
-  <a aria-label="Vercel logo" href="https://vercel.com">
-    <img src="https://img.shields.io/badge/MADE%20BY%20Vercel-000000.svg?style=for-the-badge&logo=vercel&labelColor=000000&logoWidth=20">
-  </a>
- </p>
-  
-[![Node CI](https://github.com/vercel/hyper/workflows/Node%20CI/badge.svg?event=push)](https://github.com/vercel/hyper/actions?query=workflow%3A%22Node+CI%22+branch%3Acanary+event%3Apush)
-[![Changelog #213](https://img.shields.io/badge/changelog-%23213-lightgrey.svg)](https://changelog.com/213)
+An AI-powered terminal assistant that helps you write better commands with intelligent suggestions and command history tracking.
 
-For more details, head to: https://hyper.is
+## Features
 
-## Project goals
+- **Interactive Terminal**: Web-based terminal interface with command input and history
+- **AI Suggestions**: Get intelligent command suggestions powered by OpenAI GPT-4 Turbo
+- **Command Analysis**: Understand what your commands do and their risk levels
+- **History Management**: Track command history with search and replay capabilities
+- **Risk Assessment**: Automatic safety checks to prevent dangerous command execution
+- **Command Search**: Full-text search across command history
+- **Responsive Design**: Works on desktop and tablet devices
 
-The goal of the project is to create a beautiful and extensible experience for command-line interface users, built on open web standards. In the beginning, our focus will be primarily around speed, stability and the development of the correct API for extension authors.
+## Getting Started
 
-In the future, we anticipate the community will come up with innovative additions to enhance what could be the simplest, most powerful and well-tested interface for productivity.
+### Prerequisites
 
-## Usage
+- Node.js 18+ (for development)
+- Vercel account (for deployment)
 
-[Download the latest release!](https://hyper.is/#installation)
+### Installation
 
-### Linux
-#### Arch and derivatives
-Hyper is available in the [AUR](https://aur.archlinux.org/packages/hyper/). Use an AUR [package manager](https://wiki.archlinux.org/index.php/AUR_helpers) e.g. [paru](https://github.com/Morganamilo/paru)
+1. Clone or download this repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-```sh
-paru -S hyper
-```
+3. Set up environment variables in your `.env.local`:
+   ```env
+   # Vercel AI Gateway (required)
+   # No explicit API key needed - uses Vercel's default gateway
+   ```
 
-#### NixOS
-Hyper is available as [Nix package](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/misc/hyper/default.nix), to install the app run this command:
+### Development
 
-```sh
-nix-env -i hyper
-```
-
-### macOS
-
-Use [Homebrew Cask](https://brew.sh) to download the app by running these commands:
+Run the development server:
 
 ```bash
-brew update
-brew install --cask hyper
+npm run dev
 ```
 
-### Windows
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-Use [chocolatey](https://chocolatey.org/) to install the app by running the following command (package information can be found [here](https://chocolatey.org/packages/hyper/)):
+### Building
 
 ```bash
-choco install hyper
+npm run build
+npm start
 ```
 
-**Note:** The version available on [Homebrew Cask](https://brew.sh), [Chocolatey](https://chocolatey.org), [Snapcraft](https://snapcraft.io/store) or the [AUR](https://aur.archlinux.org) may not be the latest. Please consider downloading it from [here](https://hyper.is/#installation) if that's the case.
+## Project Structure
 
-## Contribute
-
-Regardless of the platform you are working on, you will need to have Yarn installed. If you have never installed Yarn before, you can find out how at: https://yarnpkg.com/en/docs/install.
-
-1. Install necessary packages:
-  * Windows
-    - Be sure to run  `yarn global add windows-build-tools` from an elevated prompt (as an administrator) to install `windows-build-tools`.
-  * macOS
-    - Once you have installed Yarn, you can skip this section!
-  * Linux (You can see [here](https://en.wikipedia.org/wiki/List_of_Linux_distributions) what your Linux is based on.)
-    - RPM-based
-        + `GraphicsMagick`
-        + `libicns-utils`
-        + `xz` (Installed by default on some distributions.)
-    - Debian-based
-        + `graphicsmagick`
-        + `icnsutils`
-        + `xz-utils`
-2. [Fork](https://help.github.com/articles/fork-a-repo/) this repository to your own GitHub account and then [clone](https://help.github.com/articles/cloning-a-repository/) it to your local device
-3. Install the dependencies: `yarn`
-4. Build the code and watch for changes: `yarn run dev`
-5. To run `hyper`
-  * `yarn run app` from another terminal tab/window/pane
-  * If you are using **Visual Studio Code**, select `Launch Hyper` in debugger configuration to launch a new Hyper instance with debugger attached.
-  * If you interrupt `yarn run dev`, you'll need to relaunch it each time you want to test something. Webpack will watch changes and will rebuild renderer code when needed (and only what have changed). You'll just have to relaunch electron by using yarn run app or VSCode launch task.
-
-To make sure that your code works in the finished application, you can generate the binaries like this:
-
-```bash
-yarn run dist
+```
+├── app/
+│   ├── api/
+│   │   ├── ai/
+│   │   │   └── suggestions/route.ts    # AI suggestion generation
+│   │   ├── command/
+│   │   │   └── execute/route.ts        # Command execution
+│   │   └── history/
+│   │       ├── route.ts                # History retrieval
+│   │       └── search/route.ts         # History search
+│   ├── actions/
+│   │   └── db-actions.ts               # Server actions for DB operations
+│   ├── layout.tsx                      # Root layout
+│   └── page.tsx                        # Main application page
+├── components/
+│   ├── terminal.tsx                    # Terminal UI component
+│   ├── ai-suggestion-panel.tsx         # AI suggestions display
+│   ├── command-history-enhanced.tsx    # Enhanced history with search
+│   ├── command-history.tsx             # Basic history component
+│   └── command-search.tsx              # Search functionality
+├── lib/
+│   ├── types.ts                        # TypeScript type definitions
+│   ├── ai.ts                           # AI integration (Vercel AI SDK)
+│   ├── command.ts                      # Command validation and parsing
+│   ├── db.ts                           # Database operations
+│   ├── store.ts                        # State management
+│   └── api-client.ts                   # API utilities
+└── scripts/
+    └── init-db.sql                     # SQLite schema (production)
 ```
 
-After that, you will see the binary in the `./dist` folder!
+## How It Works
 
-#### Known issues that can happen during development
+1. **Command Input**: Type commands in the terminal interface
+2. **AI Analysis**: Commands are sent to OpenAI GPT-4 Turbo for analysis
+3. **Suggestions**: Get structured suggestions with:
+   - Understanding: What the command does
+   - Analysis: Potential issues or improvements
+   - Risk Assessment: Safety rating
+   - Suggested Commands: Better alternatives if applicable
+4. **History**: Commands are stored and searchable
+5. **Replay**: Re-run previous commands or modifications
 
-##### Error building `node-pty`
+## Technology Stack
 
-If after building during development you get an alert dialog related to `node-pty` issues,
-make sure its build process is working correctly by running `yarn run rebuild-node-pty`.
+- **Frontend**: React 19, Next.js 16 with App Router
+- **AI**: Vercel AI SDK 6 with OpenAI GPT-4 Turbo
+- **Database**: In-memory store (upgradeable to SQLite with better-sqlite3)
+- **Styling**: Tailwind CSS
+- **Type Safety**: TypeScript
+- **Icons**: Lucide React
 
-If you are on macOS, this typically is related to Xcode issues (like not having agreed
-to the Terms of Service by running `sudo xcodebuild` after a fresh Xcode installation).
+## API Endpoints
 
-##### Error with `C++` on macOS when running `yarn`
+### POST `/api/ai/suggestions`
+Generate AI suggestions for a command.
 
-If you are getting compiler errors when running `yarn` add the environment variable `export CXX=clang++`
+**Request:**
+```json
+{
+  "command": "rm -rf /",
+  "context": "Optional context about what you're trying to do"
+}
+```
 
-##### Error with `codesign` on macOS when running `yarn run dist`
+**Response:**
+```json
+{
+  "id": "abc123",
+  "understanding": "...",
+  "analysis": "...",
+  "suggestions": [...],
+  "riskAssessment": "...",
+  "confidence": 0.95
+}
+```
 
-If you have issues in the `codesign` step when running `yarn run dist` on macOS, you can temporarily disable code signing locally by setting
-`export CSC_IDENTITY_AUTO_DISCOVERY=false` for the current terminal session.
+### POST `/api/command/execute`
+Execute a command (with safety checks).
 
-## Related Repositories
+**Request:**
+```json
+{
+  "command": "ls -la"
+}
+```
 
-- [Website](https://github.com/vercel/hyper-site)
-- [Sample Extension](https://github.com/vercel/hyperpower)
-- [Sample Theme](https://github.com/vercel/hyperyellow)
-- [Awesome Hyper](https://github.com/bnb/awesome-hyper)
+### GET `/api/history?limit=50`
+Get command history.
+
+### GET `/api/history/search?q=query`
+Search command history.
+
+## Configuration
+
+### Environment Variables
+
+- `NEXT_PUBLIC_API_URL`: Base URL for API calls (optional)
+
+### Customization
+
+Edit the following files to customize:
+
+- **Colors**: Update Tailwind theme in `tailwind.config.ts`
+- **Terminal Theme**: Modify terminal colors in `components/terminal.tsx`
+- **AI Model**: Change model in `lib/ai.ts` (line with `openai/gpt-4-turbo`)
+- **History Limit**: Adjust in `lib/db.ts`
+
+## Safety Features
+
+- **Command Validation**: Dangerous commands are identified and flagged
+- **Risk Levels**: Commands are rated as safe, warning, or dangerous
+- **Execution Prevention**: Dangerous commands cannot be executed
+- **Confirmation**: Users must review suggestions before running commands
+
+## Future Enhancements
+
+- SQLite persistence with better-sqlite3
+- Authentication and multi-user support
+- Command output caching
+- Advanced analytics and command patterns
+- Shell integration (browser extension)
+- Mobile app support
+- Collaborative command sharing
+
+## Troubleshooting
+
+### AI suggestions not working
+- Verify API key is set up in Vercel environment
+- Check network tab in browser dev tools
+- Ensure command length is under 1000 characters
+
+### Terminal not responding
+- Refresh the page
+- Check browser console for errors
+- Clear browser cache
+
+### Search not finding results
+- Ensure search query matches command exactly
+- Search is case-insensitive
+- Try shorter search terms
+
+## License
+
+MIT
+
+## Support
+
+For issues or questions, please open an issue in the repository.
