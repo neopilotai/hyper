@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { TerminalComponent } from '@/components/terminal';
 import { CommandHistoryEnhanced } from '@/components/command-history-enhanced';
 import { AISuggestionPanel } from '@/components/ai-suggestion-panel';
@@ -13,7 +13,7 @@ export default function Home() {
   const [isLoadingSuggestion, setIsLoadingSuggestion] = useState(false);
   const [currentCommand, setCurrentCommand] = useState('');
 
-  const handleCommandInput = useCallback(async (command: string) => {
+  const handleCommandInput = async (command: string) => {
     setCurrentCommand(command);
     setIsLoadingSuggestion(true);
 
@@ -26,9 +26,9 @@ export default function Home() {
     } finally {
       setIsLoadingSuggestion(false);
     }
-  }, []);
+  };
 
-  const handleCommandExecute = useCallback((command: string) => {
+  const handleCommandExecute = (command: string) => {
     const newBlock: CommandBlock = {
       id: Math.random().toString(36).substr(2, 9),
       timestamp: new Date(),
@@ -38,16 +38,16 @@ export default function Home() {
     };
 
     setHistory((prev) => [newBlock, ...prev]);
-  }, []);
+  };
 
-  const handleReplay = useCallback((command: string) => {
+  const handleReplay = (command: string) => {
     handleCommandInput(command);
     handleCommandExecute(command);
-  }, [handleCommandInput, handleCommandExecute]);
+  };
 
-  const handleDelete = useCallback((id: string) => {
+  const handleDelete = (id: string) => {
     setHistory((prev) => prev.filter((cmd) => cmd.id !== id));
-  }, []);
+  };
 
   return (
     <main className="flex min-h-screen bg-slate-950">

@@ -1,10 +1,10 @@
 'use client';
 
 import { CommandBlock } from '@/lib/types';
-import { format } from 'date-fns';
 import { Trash2, Copy, Play, Search } from 'lucide-react';
 import { useState } from 'react';
 import { CommandSearch } from './command-search';
+import { format } from 'date-fns';
 
 interface CommandHistoryEnhancedProps {
   history: CommandBlock[];
@@ -36,6 +36,10 @@ export function CommandHistoryEnhanced({
         cmd.command.toLowerCase().includes(lowerQuery) ||
         cmd.output?.toLowerCase().includes(lowerQuery)
     );
+  };
+
+  const formatTime = (timestamp: Date) => {
+    return format(timestamp, 'yyyy-MM-dd HH:mm:ss');
   };
 
   return (
@@ -72,7 +76,7 @@ export function CommandHistoryEnhanced({
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-mono text-slate-200 truncate">{block.command}</p>
                 <p className="text-xs text-slate-600 mt-0.5">
-                  {block.timestamp && format(new Date(block.timestamp), 'HH:mm:ss')}
+                  {block.timestamp && formatTime(block.timestamp)}
                 </p>
               </div>
 
